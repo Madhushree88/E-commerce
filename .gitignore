@@ -1,0 +1,21 @@
+# Python virtual environments
+.venv/
+.venv-crewai/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# ChromaDB database
+chroma_db/
+
+# Environment variables and credentials
+.env
+.env.*
+!.env.example
+
+# macOS files
+.DS_Store
+
+# Logs
+*.log

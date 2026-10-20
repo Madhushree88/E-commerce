@@ -1,0 +1,49 @@
+
+========== IN-SCOPE QUESTIONS ==========
+
+Question: How long does a COD refund take?
+Expected: IN SCOPE
+Closest document: cod_refunds.md
+Cosine distance: 0.1403
+
+Question: Can I exchange footwear for a different size?
+Expected: IN SCOPE
+Closest document: size_exchange.md
+Cosine distance: 0.4718
+
+Question: Can I cancel my order before shipment?
+Expected: IN SCOPE
+Closest document: cancellation.md
+Cosine distance: 0.2971
+
+Question: What happens if my product arrives damaged?
+Expected: IN SCOPE
+Closest document: damaged_items.md
+Cosine distance: 0.3963
+
+Question: How long does delivery take?
+Expected: IN SCOPE
+Closest document: delivery_sla.md
+Cosine distance: 0.5002
+
+========== OUT-OF-SCOPE QUESTIONS ==========
+
+Question: Who won the FIFA World Cup in 2022?
+Expected: OUT OF SCOPE
+Closest document: cancellation.md
+Cosine distance: 0.9159
+
+Question: How do I cook vegetable biryani?
+Expected: OUT OF SCOPE
+Closest document: cancellation.md
+Cosine distance: 0.9746
+
+Question: What is the distance between Earth and Mars?
+Expected: OUT OF SCOPE
+Closest document: delivery_sla.md
+Cosine distance: 0.8914
+
+========== CALIBRATION SUMMARY ==========
+Highest in-scope distance: 0.5002
+Lowest out-of-scope distance: 0.8914
+Candidate threshold: 0.6958

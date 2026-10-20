@@ -1,0 +1,86 @@
+
+=======================================================
+COLLECTION: nykaa_fixed_chunks
+=======================================================
+
+Question: How long does a COD refund take?
+Expected: cod_refunds.md
+Retrieved documents: ['cod_refunds.md', 'cancellation.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: Can I exchange footwear for a different size?
+Expected: size_exchange.md
+Retrieved documents: ['size_exchange.md', 'warranty.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: Can I cancel my order before shipment?
+Expected: cancellation.md
+Retrieved documents: ['cancellation.md', 'delivery_sla.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: What if my product arrives damaged?
+Expected: damaged_items.md
+Retrieved documents: ['damaged_items.md', 'return_policy.md', 'warranty.md']
+Precision = 1/3 = 0.33
+Recall = 1/1 = 1.00
+
+Question: How long does delivery take?
+Expected: delivery_sla.md
+Retrieved documents: ['delivery_sla.md', 'return_policy.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: Can I use loyalty points on an order?
+Expected: loyalty_points.md
+Retrieved documents: ['loyalty_points.md', 'international_shipping.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+AVERAGE PRECISION: 0.47
+AVERAGE RECALL: 1.00
+
+=======================================================
+COLLECTION: nykaa_sentence_chunks
+=======================================================
+
+Question: How long does a COD refund take?
+Expected: cod_refunds.md
+Retrieved documents: ['cod_refunds.md']
+Precision = 1/1 = 1.00
+Recall = 1/1 = 1.00
+
+Question: Can I exchange footwear for a different size?
+Expected: size_exchange.md
+Retrieved documents: ['size_exchange.md', 'warranty.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: Can I cancel my order before shipment?
+Expected: cancellation.md
+Retrieved documents: ['cancellation.md']
+Precision = 1/1 = 1.00
+Recall = 1/1 = 1.00
+
+Question: What if my product arrives damaged?
+Expected: damaged_items.md
+Retrieved documents: ['damaged_items.md', 'delivery_sla.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: How long does delivery take?
+Expected: delivery_sla.md
+Retrieved documents: ['delivery_sla.md', 'return_policy.md']
+Precision = 1/2 = 0.50
+Recall = 1/1 = 1.00
+
+Question: Can I use loyalty points on an order?
+Expected: loyalty_points.md
+Retrieved documents: ['loyalty_points.md']
+Precision = 1/1 = 1.00
+Recall = 1/1 = 1.00
+
+AVERAGE PRECISION: 0.75
+AVERAGE RECALL: 1.00
