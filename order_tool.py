@@ -1,12 +1,13 @@
 from crewai.tools import tool
 from order_lookup import check_order_status
 from escalation import calculate_escalation_score
-
+from validation import EscalationResult
 @tool("Check Order Status")
 def order_status_tool(record_id: str) -> str:
     """Look up a simulated Nykaa order using its record ID."""
     order = check_order_status(record_id)
     escalation = calculate_escalation_score(record_id)
+    escalation = EscalationResult.model_validate(escalation).model_dump()
     if not order["found"]:
         return f"Order {record_id} was not found."
 
