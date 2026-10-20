@@ -111,6 +111,19 @@ class MockLLM(BaseLLM):
                     "This does not confirm refund eligibility "
                     "for your particular order."
                 )
+            priority_match = re.search(
+                r"Escalation Priority:\s*(High|Medium|Low)",
+                message_text
+            )
+
+            if priority_match and priority_match.group(1) == "High":
+                response += (
+                    "\n\nYour order has been identified as "
+                    "high priority based on the shipment delay "
+                    "and order age. We recommend escalating "
+                    "this case to a human support agent "
+                    "for further review."
+                )
             response += (
                 "\n\nThank you for your patience.\n"
                 "Nykaa Customer Support"
