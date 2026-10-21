@@ -2,6 +2,7 @@ from audit_logger import write_audit_log
 from policy_tool import policy_search_tool
 from pii_masking import mask_pii
 import os
+from prompt_guard import detect_prompt_injection
 
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 os.environ["MOCK_LLM"] = "true"
@@ -62,10 +63,13 @@ print("Response Composer role:", response_composer_agent.role)
 print("Retrieval Agent created successfully!")
 print("Agent role:", retrieval_agent.role)
 print("Agent goal:", retrieval_agent.goal)
+customer_question = "How long does a Cash on Delivery refund take?"
+if detect_prompt_injection(customer_question):
+    raise ValueError("Suspicious customer instruction detected.")
 retrieval_task = Task(
     description=(
-        "Respond to this customer question: "
-        "'How long does a Cash on Delivery refund take?' "
+        f"Respond to this customer question: "
+        f"'{customer_question}' "
         "This is an initial mock test only."
     ),
     expected_output="A short simulated customer support response.",
@@ -112,10 +116,11 @@ crew = Crew(
     memory=False,
     verbose=False,
 )
+
+
 print("\nStarting first CrewAI task...")
 
 result = crew.kickoff()
-
 print("\nCrewAI task result:")
 print(mask_pii(str(result)))
 print("\n--- Individual Task Results ---")
