@@ -3,7 +3,11 @@ from policy_tool import policy_search_tool
 from pii_masking import mask_pii
 import os
 from prompt_guard import detect_prompt_injection
-from response_guard import check_response_guardrail, check_order_grounding
+from response_guard import (
+    check_response_guardrail,
+    check_order_grounding,
+    check_cod_refund_grounding,
+)
 
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 os.environ["MOCK_LLM"] = "true"
@@ -138,6 +142,14 @@ if not order_grounding_result["passed"]:
 print("Order grounding:", order_grounding_result["reason"])
 
 print("Response guardrail:", guardrail_result["reason"])
+cod_grounding_result = check_cod_refund_grounding(str(result))
+
+if not cod_grounding_result["passed"]:
+    raise ValueError(
+        "COD policy grounding failed: " + cod_grounding_result["reason"]
+    )
+
+print("COD policy grounding:", cod_grounding_result["reason"])
 print("\nCrewAI task result:")
 print(mask_pii(str(result)))
 print("\n--- Individual Task Results ---")

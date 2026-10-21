@@ -41,3 +41,48 @@ def check_order_grounding(response: str, order_id: str) -> dict:
         "passed": True,
         "reason": "Response contains only the verified order ID."
     }
+def check_cod_refund_grounding(response: str) -> dict:
+    import re
+
+    text = response.lower()
+
+    if not re.search(r"\brefund\b", text):
+        return {
+            "passed": False,
+            "reason": "Response does not discuss a refund."
+        }
+
+    # Detect individual refund timeframe claims
+    timeframes = re.findall(
+        r"\b(\d+)\s*business\s*days\b",
+        text
+    )
+
+    # Reject unsupported single-number timeframes
+    if any(number not in ("5", "7") for number in timeframes):
+        return {
+            "passed": False,
+            "reason": "Response contains an unsupported refund timeframe."
+        }
+
+    # Check the expected policy timeframe
+    correct_timeframe = re.search(
+        r"\b5\s*(?:to|-|–)\s*7\s*business\s*days\b",
+        text
+    )
+
+    if not correct_timeframe:
+        return {
+            "passed": False,
+            "reason": "COD refund timeframe does not match the expected policy."
+        }
+
+    return {
+        "passed": True,
+        "reason": "COD refund timeframe matches the expected policy."
+    }
+
+    return {
+        "passed": True,
+        "reason": "COD refund timeframe matches the expected policy."
+    }
