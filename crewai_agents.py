@@ -3,6 +3,7 @@ from policy_tool import policy_search_tool
 from pii_masking import mask_pii
 import os
 from prompt_guard import detect_prompt_injection
+from response_guard import check_response_guardrail
 
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 os.environ["MOCK_LLM"] = "true"
@@ -121,6 +122,14 @@ crew = Crew(
 print("\nStarting first CrewAI task...")
 
 result = crew.kickoff()
+guardrail_result = check_response_guardrail(str(result))
+
+if not guardrail_result["passed"]:
+    raise ValueError(
+        "Customer response blocked: " + guardrail_result["reason"]
+    )
+
+print("Response guardrail:", guardrail_result["reason"])
 print("\nCrewAI task result:")
 print(mask_pii(str(result)))
 print("\n--- Individual Task Results ---")
