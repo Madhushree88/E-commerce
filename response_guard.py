@@ -20,3 +20,24 @@ def check_response_guardrail(response: str) -> dict:
         "passed": True,
         "reason": "No predefined unsupported refund promises detected."
     }
+def check_order_grounding(response: str, order_id: str) -> dict:
+    import re
+
+    mentioned_ids = re.findall(r"\bNK\d{4}\b", response)
+
+    if any(found_id != order_id for found_id in mentioned_ids):
+        return {
+            "passed": False,
+            "reason": "Response contains an incorrect order ID."
+        }
+
+    if order_id not in mentioned_ids:
+        return {
+            "passed": False,
+            "reason": "Response does not contain the verified order ID."
+        }
+
+    return {
+        "passed": True,
+        "reason": "Response contains only the verified order ID."
+    }
