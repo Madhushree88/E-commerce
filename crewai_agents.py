@@ -1,3 +1,4 @@
+from audit_logger import write_audit_log
 from policy_tool import policy_search_tool
 from pii_masking import mask_pii
 import os
@@ -123,3 +124,4 @@ for index, task_output in enumerate(result.tasks_output, start=1):
     print(f"\nTask {index}")
     print("Agent:", task_output.agent)
     print("Output:", mask_pii(task_output.raw))
+    write_audit_log(task_output.agent, task_output.raw)
