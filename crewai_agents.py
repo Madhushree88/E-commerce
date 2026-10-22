@@ -76,8 +76,9 @@ print("Response Composer role:", response_composer_agent.role)
 print("Retrieval Agent created successfully!")
 print("Agent role:", retrieval_agent.role)
 print("Agent goal:", retrieval_agent.goal)
-customer_question = "For order NK0002, how long does a Cash on Delivery refund take?"
+customer_question = "How long does a Cash on Delivery refund take for my order?"
 session_id = "customer1"
+add_customer_message(session_id, "My order is NK0002.")
 previous_conversation = get_conversation_context(session_id)
 
 remembered_order_id = get_order_id_from_memory(session_id)
