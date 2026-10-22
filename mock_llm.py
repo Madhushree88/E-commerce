@@ -29,16 +29,17 @@ class MockLLM(BaseLLM):
 
             message_text = str(messages)
 
-            question_match = re.search(
+            question_matches = re.findall(
                 r"Respond to this customer question:\s*'([^']+)'",
                 message_text
             )
 
-            if not question_match:
+            if not question_matches:
                 return "Customer question not found. Please escalate to support."
 
-            customer_question = question_match.group(1)
+            customer_question = question_matches[-1]
 
+            print("DEBUG - Customer question:", customer_question)
             print("DEBUG - Customer question:", customer_question)
             print("DEBUG - Searching policy documents")
 
