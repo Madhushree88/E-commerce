@@ -188,14 +188,26 @@ def run_support_agent(customer_question: str, session_id: str):
     print("Order grounding:", order_grounding_result["reason"])
 
     print("Response guardrail:", guardrail_result["reason"])
-    cod_grounding_result = check_cod_refund_grounding(str(result))
-
-    if not cod_grounding_result["passed"]:
-        raise ValueError(
-            "COD policy grounding failed: " + cod_grounding_result["reason"]
+    is_cod_refund_question = (
+        "refund" in customer_question.lower()
+        and (
+            "cod" in customer_question.lower()
+            or "cash on delivery" in customer_question.lower()
         )
+    )
 
-    print("COD policy grounding:", cod_grounding_result["reason"])
+    if is_cod_refund_question:
+        cod_grounding_result = check_cod_refund_grounding(str(result))
+
+        if not cod_grounding_result["passed"]:
+            raise ValueError(
+                "COD policy grounding failed: "
+                + cod_grounding_result["reason"]
+            )
+
+        print("COD policy grounding:", cod_grounding_result["reason"])
+    else:
+        print("COD policy grounding: Skipped (not a COD refund question)")
     add_agent_message(session_id, str(result))
 
     print(
