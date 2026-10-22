@@ -19,8 +19,15 @@ class ChatRequest(BaseModel):
 
 @app.post("/chat")
 def chat(request: ChatRequest):
+    from crewai_agents import run_support_agent
+
+    agent_response = run_support_agent(
+        customer_question=request.question,
+        session_id=request.session_id
+    )
+
     return {
         "session_id": request.session_id,
         "customer_question": request.question,
-        "message": "Customer question received successfully"
+        "agent_response": agent_response
     }
