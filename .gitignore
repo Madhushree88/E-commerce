@@ -20,4 +20,6 @@ chroma_db/
 # Logs
 *.log
 # Generated audit logs
+logs/crewai_agents_backup.py
+crewai_agents_backup.py
 logs/
