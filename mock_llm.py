@@ -1,3 +1,4 @@
+import re
 from crewai.llms.base_llm import BaseLLM
 from order_tool import order_status_tool
 from policy_tool import policy_search_tool
@@ -21,11 +22,10 @@ class MockLLM(BaseLLM):
         response_model=None,
     ):
         agent_role = getattr(from_agent, "role", None)
-
+        message_text = str(messages)
         print("DEBUG - Tools received:", bool(tools))
         print("DEBUG - Current agent:", agent_role)
         if agent_role == "Nykaa Policy Retrieval Specialist":
-            import re
 
             message_text = str(messages)
 
@@ -48,7 +48,6 @@ class MockLLM(BaseLLM):
 
             return str(result)
         if agent_role == "Nykaa Customer Response Composer":
-            import re
 
             message_text = str(messages)
 
@@ -132,7 +131,19 @@ class MockLLM(BaseLLM):
             return response
         if tools:
             print("DEBUG - Executing order lookup tool")
-            result = order_status_tool.run(record_id="NK0001")
+
+            order_match = re.search(
+                r"\bNK\d{4}\b",
+                message_text,
+                re.IGNORECASE
+            )
+            print("DEBUG - Order ID match found:", bool(order_match))
+            if not order_match:
+                return "Order lookup requires a valid order ID."
+
+            record_id = order_match.group(0).upper()
+            print("DEBUG - Order ID passed to lookup:", record_id)
+            result = order_status_tool.run(record_id=record_id)
             return str(result)
 
         return (
