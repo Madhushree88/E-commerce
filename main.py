@@ -1,5 +1,5 @@
 import re
-
+from crewai_agents import run_support_agent
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from session_memory import get_order_id_from_memory
@@ -49,10 +49,49 @@ async def websocket_chat(websocket: WebSocket):
 
     try:
         while True:
-            message = await websocket.receive_text()
-            await websocket.send_text(
-                f"Nykaa WebSocket received: {message}"
+            data = await websocket.receive_json()
+
+            session_id = data.get("session_id")
+            question = data.get("question")
+
+            if not session_id or not question:
+                await websocket.send_json({
+                    "error": "Session ID and question are required."
+                })
+                continue
+
+            order_match = re.search(
+                r"\bNK\d{4}\b",
+                question,
+                re.IGNORECASE
             )
 
+            remembered_order_id = get_order_id_from_memory(
+                session_id
+            )
+
+            if not order_match and not remembered_order_id:
+                await websocket.send_json({
+                    "error": "Please provide your order ID, such as NK0002."
+                })
+                continue
+
+            try:
+                agent_response = run_support_agent(
+                    customer_question=question,
+                    session_id=session_id
+                )
+
+                await websocket.send_json({
+                    "session_id": session_id,
+                    "customer_question": question,
+                    "agent_response": agent_response
+                })
+
+            except ValueError:
+                await websocket.send_json({
+                    "error": "Your request could not be processed safely."
+                })
+
     except WebSocketDisconnect:
-        print("WebSocket client disconnected.")
+        print("WebSocket client disconnected.")        
