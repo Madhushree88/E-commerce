@@ -1,6 +1,6 @@
 import re
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from session_memory import get_order_id_from_memory
 app = FastAPI(title="Nykaa Customer Support Agent API")
@@ -43,3 +43,16 @@ def chat(request: ChatRequest):
             status_code=400,
             detail="Your request could not be processed safely. Please check the order details and try again."
         )
+@app.websocket("/ws/chat")
+async def websocket_chat(websocket: WebSocket):
+    await websocket.accept()
+
+    try:
+        while True:
+            message = await websocket.receive_text()
+            await websocket.send_text(
+                f"Nykaa WebSocket received: {message}"
+            )
+
+    except WebSocketDisconnect:
+        print("WebSocket client disconnected.")
