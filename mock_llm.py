@@ -52,20 +52,26 @@ class MockLLM(BaseLLM):
 
             message_text = str(messages)
 
-            order_match = re.search(
+            
+            order_matches = re.findall(
                 r"Order ID:\s*(NK\d+)",
                 message_text
             )
 
-            status_match = re.search(
+            status_matches = re.findall(
                 r"Status:\s*(\w+)",
                 message_text
             )
 
-            delay_match = re.search(
+            delay_matches = re.findall(
                 r"Delayed Shipment:\s*(True|False)",
                 message_text
             )
+
+            
+            order_match = order_matches[-1] if order_matches else None
+            status_match = status_matches[-1] if status_matches else None
+            delay_match = delay_matches[-1] if delay_matches else None
 
             if not all([order_match, status_match, delay_match]):
                 return (
@@ -75,9 +81,10 @@ class MockLLM(BaseLLM):
                     "Nykaa Customer Support"
                 )
 
-            order_id = order_match.group(1)
-            status = status_match.group(1)
-            delayed = delay_match.group(1) == "True"
+            order_id = order_match
+            status = status_match
+            delayed = delay_match == "True"
+
 
             response = (
                 f"Dear Customer,\n\n"
@@ -130,22 +137,49 @@ class MockLLM(BaseLLM):
             )
 
             return response
+        
         if tools:
             print("DEBUG - Executing order lookup tool")
+            print("DEBUG LOOKUP MESSAGE:", message_text[-1200:])
+
+            order_matches = re.findall(
+    r"Current Task:.*?Current customer question:\s*(.*?)(?=\s+Use the Check Order Status tool)",
+    message_text,
+    re.IGNORECASE | re.DOTALL
+)
+
+            current_question = (
+                order_matches[-1] if order_matches else ""
+            )
 
             order_match = re.search(
                 r"\bNK\d{4}\b",
-                message_text,
+                current_question,
                 re.IGNORECASE
             )
+
+            if not order_match:
+                order_match = re.search(
+                    r"Previously verified order reference:\s*(NK\d{4})",
+                    message_text,
+                    re.IGNORECASE
+                )
+
             print("DEBUG - Order ID match found:", bool(order_match))
+
             if not order_match:
                 return "Order lookup requires a valid order ID."
 
-            record_id = order_match.group(0).upper()
+            record_id = (
+    order_match.group(1)
+    if order_match.lastindex
+    else order_match.group(0)
+).upper()
             print("DEBUG - Order ID passed to lookup:", record_id)
+
             result = order_status_tool.run(record_id=record_id)
             return str(result)
+
 
         return (
             "This is a simulated response from the Nykaa "

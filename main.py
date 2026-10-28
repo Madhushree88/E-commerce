@@ -38,12 +38,17 @@ def chat(request: ChatRequest):
             "agent_response": agent_response
         }
 
-    except ValueError:
+       
+    except ValueError as e:
+        print("DEBUG CHAT ERROR:", str(e))
         raise HTTPException(
             status_code=400,
             detail="Your request could not be processed safely. Please check the order details and try again."
         )
+
+
 @app.websocket("/ws/chat")
+
 async def websocket_chat(websocket: WebSocket):
     await websocket.accept()
 
