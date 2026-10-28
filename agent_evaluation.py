@@ -96,7 +96,8 @@ TEST_CASES = [
         "expected_text": "5 to 7 business days",
     },
 ]
-
+total_tests = len(TEST_CASES)
+passed_tests = 0
 for case in TEST_CASES:
     response = client.post(
         "/chat",
@@ -116,9 +117,20 @@ for case in TEST_CASES:
         response.status_code == case["expected_status"]
         and case["expected_text"].lower() in response_text.lower()
     )
+    if passed:
+        passed_tests += 1
 
     print(
         f"{case['session_id']}: "
         f"{'PASS' if passed else 'FAIL'} "
         f"(HTTP {response.status_code})"
     )
+
+failed_tests = total_tests - passed_tests
+pass_rate = (passed_tests / total_tests * 100) if total_tests else 0
+
+print("\n===== EVALUATION SUMMARY =====")
+print(f"Total Tests: {total_tests}")
+print(f"Passed: {passed_tests}")
+print(f"Failed: {failed_tests}")
+print(f"Pass Rate: {pass_rate:.2f}%")
