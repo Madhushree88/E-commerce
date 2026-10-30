@@ -5,6 +5,7 @@ from autogen_agentchat.agents import AssistantAgent
 from autogen_agentchat.teams import RoundRobinGroupChat
 from autogen_agentchat.conditions import MaxMessageTermination
 from autogen_ext.models.replay import ReplayChatCompletionClient
+from autogen_validation import validate_final_response
 
 
 # 1. Mock model clients
@@ -115,9 +116,32 @@ async def main():
         )
     )
 
+    final_response = None
+
     for message in result.messages:
         print(f"\n--- {message.source} ---")
         print(message.content)
+
+        if message.source == "Final_Editor":
+            final_response = message.content
+
+    print("\n--- RULE-BASED VALIDATION ---")
+
+    if final_response is None:
+        print("REJECTED: Final Editor response is missing.")
+    else:
+        validation = validate_final_response(
+            final_response,
+            expected_order_id="NK0002",
+        )
+
+        print("Verdict:", validation["verdict"])
+        print("Issues:", validation["issues"])
+
+        if validation["valid"]:
+            print("Final response passed the configured validation checks.")
+        else:
+            print("Final response rejected. Human review required.")
 
 
 if __name__ == "__main__":
