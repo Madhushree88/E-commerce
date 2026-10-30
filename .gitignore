@@ -23,3 +23,5 @@ chroma_db/
 logs/crewai_agents_backup.py
 crewai_agents_backup.py
 logs/
+
+.venv-autogen/
