@@ -123,12 +123,13 @@ def run_support_agent(customer_question: str, session_id: str):
         agent=order_lookup_agent,
     )
     response_composer_task = Task(
-        description=(
-            "Prepare a clear, polite customer support response "
-            "using the policy information and order details "
-            "from the previous two tasks. "
-            "Do not invent order details or policy rules."
-        ),
+    description=(
+        f"Current customer question: {customer_question}\n"
+        "Prepare a clear, polite customer support response "
+        "using the policy information and order details "
+        "from the previous two tasks. "
+        "Do not invent order details or policy rules."
+    ),
         expected_output=(
             "A customer-friendly response explaining the order "
             "status and relevant policy information."
