@@ -207,6 +207,28 @@ The project uses separate Python virtual environments to isolate dependencies:
 | `.venv-autogen` | AutoGen review workflow |
 
 Virtual environments are excluded from Git and should be created locally as needed.
+### Dependency Installation
+
+The project uses Python 3.11 and three separate virtual environments to isolate dependencies.
+
+From the project root directory, create the environments and install their respective dependencies:
+
+```bash
+python3.11 -m venv .venv
+.venv/bin/python -m pip install -r requirements-rag.txt
+
+python3.11 -m venv .venv-crewai
+.venv-crewai/bin/python -m pip install -r requirements-crewai.txt
+
+python3.11 -m venv .venv-autogen
+.venv-autogen/bin/python -m pip install -r requirements-autogen.txt
+```
+
+The RAG environment handles embeddings and vector retrieval, the CrewAI environment runs the primary customer-support workflow and API, and the AutoGen environment runs the separate multi-agent review demonstration.
+
+The application uses fictional data and mock model responses. No paid LLM API key is required for the demonstrated workflows.
+
+**Note:** The dependency files capture the packages installed in the development environments. Reproducibility on a different operating system or Python installation has not been independently verified.
 
 ### Run the AutoGen Demonstration
 
