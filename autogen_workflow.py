@@ -6,6 +6,7 @@ from autogen_agentchat.teams import RoundRobinGroupChat
 from autogen_agentchat.conditions import MaxMessageTermination
 from autogen_ext.models.replay import ReplayChatCompletionClient
 from autogen_validation import validate_final_response
+from cache_manager import get_cached_policy
 
 
 # 1. Mock model clients
@@ -108,6 +109,10 @@ review_team = RoundRobinGroupChat(
 # 4. Run workflow
 
 async def main():
+    cached_policy = get_cached_policy("cod_refunds")
+    print("\n--- CACHED FICTIONAL POLICY ---")
+    print(cached_policy)
+
     result = await review_team.run(
         task=(
             "Review simulated order NK0002 and explain the "
