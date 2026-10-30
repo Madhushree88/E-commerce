@@ -25,3 +25,6 @@ crewai_agents_backup.py
 logs/
 
 .venv-autogen/
+
+README_backup.md
+evaluation_debug.txt
