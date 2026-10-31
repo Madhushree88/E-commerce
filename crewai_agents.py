@@ -3,6 +3,8 @@ import os
 os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
 os.environ["OTEL_SDK_DISABLED"] = "true"
 os.environ["MOCK_LLM"] = "true"
+os.environ["HF_HUB_OFFLINE"] = "1"
+os.environ["TRANSFORMERS_OFFLINE"] = "1"
 from audit_logger import write_audit_log
 from policy_tool import policy_search_tool
 from pii_masking import mask_pii
