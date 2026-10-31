@@ -1,7 +1,13 @@
+import os
+
+os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
+os.environ["OTEL_SDK_DISABLED"] = "true"
+os.environ["MOCK_LLM"] = "true"
 from audit_logger import write_audit_log
 from policy_tool import policy_search_tool
 from pii_masking import mask_pii
-import os
+
+
 from session_memory import (
     add_customer_message,
     add_agent_message,
@@ -16,9 +22,6 @@ from response_guard import (
     check_order_grounding,
     check_cod_refund_grounding,
 )
-
-os.environ["CREWAI_DISABLE_TELEMETRY"] = "true"
-os.environ["MOCK_LLM"] = "true"
 
 from crewai import Agent, Task, Crew, Process
 from mock_llm import MockLLM
